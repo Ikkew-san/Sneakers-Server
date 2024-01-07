@@ -35,20 +35,22 @@ router.get("/products", async (req, res) => {
           category_name: 0,
         }
       );
+      products = await products.filter(({ rating }) => {
+        return ratings ? rating >= ratings : rating > 0;
+      });
 
-      let max = products.reduce((prev, curr) => {
-        return curr.discounted_price > prev.discounted_price ? curr : prev;
-      }).discounted_price;
+      let max = 0;
+      if (products.length != 0) {
+        max = products.reduce((prev, curr) => {
+          return curr.discounted_price > prev.discounted_price ? curr : prev;
+        }).discounted_price;
+      }
 
       price[0] != 0 && price[1] != 0
         ? (products = products.filter(
             ({ discounted_price }) => discounted_price >= price[0] && discounted_price <= price[1]
           ))
         : products;
-
-      products = products.filter(({ rating }) => {
-        return ratings ? rating >= ratings : rating > 0;
-      });
 
       let total_products = products.length;
 
@@ -75,19 +77,22 @@ router.get("/products", async (req, res) => {
         }
       );
 
-      let max = products.reduce((prev, curr) => {
-        return curr.discounted_price > prev.discounted_price ? curr : prev;
-      }).discounted_price;
+      products = await products.filter(({ rating }) => {
+        return ratings ? rating >= ratings : rating > 0;
+      });
+
+      let max = 0;
+      if (products.length != 0) {
+        max = products.reduce((prev, curr) => {
+          return curr.discounted_price > prev.discounted_price ? curr : prev;
+        }).discounted_price;
+      }
 
       price[0] != 0 && price[1] != 0
         ? (products = products.filter(
             ({ discounted_price }) => discounted_price >= price[0] && discounted_price <= price[1]
           ))
         : products;
-
-      products = products.filter(({ rating }) => {
-        return ratings ? rating >= ratings : rating > 0;
-      });
 
       let total_products = products.length;
       data = products.slice(start_index, end_index);
